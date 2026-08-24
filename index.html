@@ -236,6 +236,8 @@
   .hero-in{position:relative;z-index:2;max-width:820px;margin:0 auto;text-align:center}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--gold-dark);font-weight:800;font-size:13.5px;padding:8px 18px;border-radius:30px;margin-bottom:24px;box-shadow:var(--shadow-sm);border:1px solid #f2e6cd}
   .eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 0 4px rgba(30,185,128,.18)}
+  .eyebrows{display:inline-flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:24px}
+  .eyebrows .eyebrow{margin-bottom:0}
   .hero h1{font-size:clamp(32px,5.6vw,56px);font-weight:900;margin-bottom:20px;color:var(--navy)}
   .hero h1 .hl{background:linear-gradient(120deg,var(--gold-dark),#f0b93e);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .hero p.sub{font-size:clamp(17px,2.3vw,21px);color:#3c4966;max-width:660px;margin:0 auto 34px;font-weight:500}
@@ -430,7 +432,10 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-in">
-    <span class="eyebrow reveal"><span class="dot"></span> אומדן תקציב לבנייה פרטית</span>
+    <span class="eyebrows reveal">
+      <span class="eyebrow"><span class="dot"></span> אומדן תקציב לבנייה פרטית</span>
+      <span class="eyebrow"><span class="dot"></span> ניהול ופיקוח בנייה</span>
+    </span>
     <h1 class="reveal d1">יש לך תוכניות לבית?<br><span class="hl">נדע לך בדיוק כמה יעלה לבנות.</span></h1>
     <p class="sub reveal d2">אומדן תקציב מקצועי ומפורט על בסיס התוכניות שלך — עם עשרות שנות ניסיון בבנייה פרטית, שקיפות מלאה, וליווי אישי לכל אורך הדרך.</p>
     <div class="hero-cta reveal d3">
