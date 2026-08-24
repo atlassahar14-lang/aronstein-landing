@@ -493,6 +493,15 @@
   </div>
 </section>
 
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-title reveal"><div class="kick">הפרויקטים שלנו</div><h2>בתים שכבר בנינו</h2><p>הצצה לעבודות אמיתיות — מהאומדן ועד המפתח.</p></div>
+    <div class="proj-grid" id="proj-grid"></div>
+    <div class="proj-empty" id="proj-empty" style="display:none">הפרויקטים יתווספו כאן בקרוב.</div>
+  </div>
+</section>
+
 <!-- TESTIMONIALS -->
 <section style="background:linear-gradient(180deg,#fff,var(--bg))">
   <div class="wrap">
@@ -536,6 +545,7 @@
   <b>ארונשטיין — אומדני תקציב, פיקוח וניהול בנייה</b>
   <div class="fl">📞 052-5999897 · ✉️ [מייל]</div>
   <div class="fl"><a href="https://atlassahar14-lang.github.io/aronstein-pikuach/" onclick="try{sessionStorage.setItem('aronstein_sys_entry','1')}catch(e){}">כניסה למערכת הניהול ←</a></div>
+  <div class="fl" style="opacity:.5;font-size:12px;margin-top:4px"><span class="admin-link" id="admin-open">ניהול גלריית פרויקטים</span></div>
 </footer>
 
 <div class="float">
@@ -554,6 +564,196 @@
   function countUp(el){var to=+el.dataset.to,st=null;function step(t){if(!st)st=t;var p=Math.min((t-st)/900,1);el.textContent=Math.round(p*to);if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
   var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){countUp(e.target);cio.unobserve(e.target);}});},{threshold:.6});
   document.querySelectorAll('.count').forEach(function(el){cio.observe(el);});
+</script>
+
+<!-- ===== projects gallery (Supabase-backed) ===== -->
+<style>
+  #projects .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:900px){#projects .proj-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){#projects .proj-grid{grid-template-columns:1fr}}
+  .proj-card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .25s,box-shadow .25s}
+  .proj-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+  .proj-card .cover{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--soft)}
+  .proj-card .pc-body{padding:18px 20px}
+  .proj-card h3{font-size:18px;color:var(--navy);font-weight:800;margin-bottom:4px}
+  .proj-card .loc{font-size:13.5px;color:var(--gold-dark);font-weight:700;margin-bottom:8px}
+  .proj-card p{font-size:14.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .proj-card .pc-count{font-size:12px;color:var(--muted);margin-top:8px}
+  .proj-empty{text-align:center;color:var(--muted);padding:26px}
+  .lb{position:fixed;inset:0;z-index:100000;background:rgba(10,15,25,.92);display:none;align-items:center;justify-content:center;padding:18px}
+  .lb.open{display:flex}
+  .lb-inner{max-width:900px;width:100%;background:var(--card);border-radius:18px;overflow:hidden;position:relative}
+  .lb-imgwrap{position:relative;background:#000;display:flex;align-items:center;justify-content:center}
+  .lb-imgwrap img{max-width:100%;max-height:64vh;object-fit:contain;display:block}
+  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.92);border:0;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;color:var(--navy);line-height:1}
+  .lb-nav.prev{right:12px}.lb-nav.next{left:12px}
+  .lb-close{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.92);border:0;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;z-index:3;color:var(--navy)}
+  .lb-dots{display:flex;gap:6px;justify-content:center;padding:8px}
+  .lb-dots span{width:8px;height:8px;border-radius:50%;background:var(--line)}
+  .lb-dots span.on{background:var(--gold)}
+  .lb-info{padding:16px 22px 20px}
+  .lb-info h3{color:var(--navy);font-size:20px;font-weight:800}
+  .lb-info .loc{color:var(--gold-dark);font-weight:700;font-size:14px;margin:2px 0 8px}
+  .lb-info p{color:var(--muted);font-size:15px;white-space:pre-wrap}
+  .admin-link{cursor:pointer}
+  .admin-panel{position:fixed;inset:0;z-index:100001;background:rgba(10,15,25,.6);display:none;align-items:flex-start;justify-content:center;padding:28px 14px;overflow:auto}
+  .admin-panel.open{display:flex}
+  .admin-box{background:var(--card);border-radius:18px;max-width:560px;width:100%;padding:24px;box-shadow:var(--shadow);font-family:'Assistant','Segoe UI',system-ui,Arial,sans-serif}
+  .admin-box h3{color:var(--navy);font-size:20px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+  .admin-box label{display:block;font-size:13px;font-weight:700;color:var(--navy);margin:10px 0 5px}
+  .admin-box input,.admin-box textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;font-family:inherit;font-size:15px;background:#fafbfd}
+  .admin-box .row-btn{margin-top:16px;display:flex;gap:10px}
+  .a-msg{font-size:13.5px;margin-top:10px;min-height:18px}
+  .a-msg.err{color:#d33}.a-msg.ok{color:#1a8a52}
+  .admin-list{margin-top:16px;border-top:1px solid var(--line);padding-top:12px;max-height:240px;overflow:auto}
+  .admin-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .admin-item img{width:44px;height:44px;object-fit:cover;border-radius:8px}
+  .admin-item .del{margin-inline-start:auto;background:#fde8e8;color:#d33;border:0;border-radius:8px;padding:6px 11px;cursor:pointer;font-weight:700}
+  .admin-x{background:none;border:0;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
+</style>
+
+<div class="lb" id="lb">
+  <div class="lb-inner">
+    <button class="lb-close" id="lb-close" aria-label="סגור">✕</button>
+    <div class="lb-imgwrap">
+      <button class="lb-nav prev" id="lb-prev" aria-label="הקודם">›</button>
+      <img id="lb-img" alt="">
+      <button class="lb-nav next" id="lb-next" aria-label="הבא">‹</button>
+    </div>
+    <div class="lb-dots" id="lb-dots"></div>
+    <div class="lb-info"><h3 id="lb-title"></h3><div class="loc" id="lb-loc"></div><p id="lb-desc"></p></div>
+  </div>
+</div>
+
+<div class="admin-panel" id="admin-panel"><div class="admin-box" id="admin-box"></div></div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/+esm';
+const SB_URL='https://knbbbrnwzbkywkrcponi.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuYmJicm53emJreXdrcmNwb25pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2ODg2MjksImV4cCI6MjA5NjI2NDYyOX0.FQ34u5GL47EemB3ibmZ5EP5mkoSdivvoxPVVRpxZYxw';
+const BUCKET='media';
+const sb=createClient(SB_URL,SB_KEY);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+
+/* ---- public gallery ---- */
+async function loadProjects(){
+  const grid=$('proj-grid'), empty=$('proj-empty');
+  try{
+    const {data,error}=await sb.from('landing_projects').select('*').order('sort',{ascending:true}).order('created_at',{ascending:false});
+    if(error) throw error;
+    window.__projects=data||[];
+    if(!data||!data.length){ empty.style.display='block'; grid.innerHTML=''; return; }
+    empty.style.display='none';
+    grid.innerHTML=data.map((p,idx)=>{
+      const imgs=Array.isArray(p.images)?p.images:[];
+      const cover=imgs[0]||'';
+      return `<div class="proj-card" data-i="${idx}">
+        ${cover?`<img class="cover" src="${cover}" alt="${esc(p.name)}" loading="lazy">`:`<div class="cover"></div>`}
+        <div class="pc-body"><h3>${esc(p.name)}</h3>
+        ${p.location?`<div class="loc">📍 ${esc(p.location)}</div>`:''}
+        ${p.description?`<p>${esc(p.description)}</p>`:''}
+        ${imgs.length>1?`<div class="pc-count">📷 ${imgs.length} תמונות</div>`:''}
+        </div></div>`;
+    }).join('');
+    grid.querySelectorAll('.proj-card').forEach(c=>c.addEventListener('click',()=>openLb(+c.dataset.i,0)));
+  }catch(e){ console.warn('gallery load:',e.message); empty.style.display='block'; empty.textContent='הגלריה תופיע כאן ברגע שיתווספו פרויקטים.'; }
+}
+
+/* ---- lightbox ---- */
+let lbP=0,lbI=0;
+function openLb(pi,ii){ lbP=pi; lbI=ii; renderLb(); $('lb').classList.add('open'); }
+function renderLb(){
+  const p=(window.__projects||[])[lbP]; if(!p)return;
+  const imgs=Array.isArray(p.images)?p.images:[];
+  $('lb-img').src=imgs[lbI]||''; $('lb-title').textContent=p.name||'';
+  $('lb-loc').textContent=p.location?('📍 '+p.location):''; $('lb-desc').textContent=p.description||'';
+  $('lb-dots').innerHTML=imgs.map((_,i)=>`<span class="${i===lbI?'on':''}"></span>`).join('');
+  const multi=imgs.length>1;
+  $('lb-prev').style.display=multi?'':'none'; $('lb-next').style.display=multi?'':'none';
+}
+function lbStep(d){ const p=(window.__projects||[])[lbP]; const n=(p.images||[]).length; if(!n)return; lbI=(lbI+d+n)%n; renderLb(); }
+$('lb-close').onclick=()=>$('lb').classList.remove('open');
+$('lb').addEventListener('click',e=>{ if(e.target.id==='lb')$('lb').classList.remove('open'); });
+$('lb-prev').onclick=()=>lbStep(-1); $('lb-next').onclick=()=>lbStep(1);
+
+/* ---- admin ---- */
+const panel=$('admin-panel'), box=$('admin-box');
+function openAdmin(){ panel.classList.add('open'); renderAdmin(); }
+function closeAdmin(){ panel.classList.remove('open'); }
+$('admin-open')&&($('admin-open').onclick=openAdmin);
+if(location.hash==='#admin') openAdmin();
+panel.addEventListener('click',e=>{ if(e.target===panel)closeAdmin(); });
+
+async function renderAdmin(){
+  const {data}=await sb.auth.getUser();
+  if(!data||!data.user){
+    box.innerHTML=`<h3>ניהול פרויקטים <button class="admin-x" id="a-x">✕</button></h3>
+      <label>אימייל</label><input id="a-email" type="email" placeholder="name@example.com" autocomplete="username">
+      <label>סיסמה</label><input id="a-pass" type="password" autocomplete="current-password">
+      <div class="row-btn"><button class="btn btn-gold" id="a-login" type="button" style="width:100%">התחבר</button></div>
+      <div class="a-msg" id="a-msg"></div>`;
+    $('a-x').onclick=closeAdmin; $('a-login').onclick=doLogin;
+    return;
+  }
+  box.innerHTML=`<h3>הוסף פרויקט <button class="admin-x" id="a-x">✕</button></h3>
+    <label>שם הפרויקט *</label><input id="p-name" placeholder="למשל: וילת משפחת כהן">
+    <label>מיקום *</label><input id="p-loc" placeholder="למשל: כוכב יאיר">
+    <label>כמה מילים על הפרויקט</label><textarea id="p-desc" rows="3" placeholder="למשל: בית פרטי 240 מ״ר, שני מפלסים, בטון חשוף..."></textarea>
+    <label>תמונות (אפשר לבחור כמה יחד)</label><input id="p-files" type="file" accept="image/*" multiple>
+    <div class="row-btn"><button class="btn btn-gold" id="p-save" type="button" style="flex:1">פרסם פרויקט</button>
+    <button class="btn btn-outline" id="a-logout" type="button">התנתק</button></div>
+    <div class="a-msg" id="a-msg"></div><div class="admin-list" id="a-list"></div>`;
+  $('a-x').onclick=closeAdmin;
+  $('a-logout').onclick=async()=>{ await sb.auth.signOut(); renderAdmin(); };
+  $('p-save').onclick=saveProject;
+  renderAdminList();
+}
+async function doLogin(){
+  const email=$('a-email').value.trim(), pass=$('a-pass').value, msg=$('a-msg');
+  msg.className='a-msg'; msg.textContent='מתחבר...';
+  const {error}=await sb.auth.signInWithPassword({email,password:pass});
+  if(error){ msg.className='a-msg err'; msg.textContent='התחברות נכשלה — בדוק אימייל וסיסמה.'; return; }
+  renderAdmin();
+}
+async function saveProject(){
+  const name=$('p-name').value.trim(), loc=$('p-loc').value.trim(), desc=$('p-desc').value.trim();
+  const files=$('p-files').files, msg=$('a-msg');
+  if(!name||!loc){ msg.className='a-msg err'; msg.textContent='נא למלא שם ומיקום.'; return; }
+  msg.className='a-msg'; msg.textContent='מעלה תמונות...';
+  try{
+    const urls=[];
+    for(let i=0;i<files.length;i++){
+      const f=files[i];
+      const ext=((f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,''))||'jpg';
+      const path='landing/'+Date.now()+'-'+i+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;
+      const up=await sb.storage.from(BUCKET).upload(path,f,{cacheControl:'3600',upsert:false});
+      if(up.error) throw up.error;
+      urls.push(sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
+    }
+    msg.textContent='שומר...';
+    const ins=await sb.from('landing_projects').insert({name,location:loc,description:desc,images:urls});
+    if(ins.error) throw ins.error;
+    msg.className='a-msg ok'; msg.textContent='הפרויקט פורסם! ✓';
+    $('p-name').value=''; $('p-loc').value=''; $('p-desc').value=''; $('p-files').value='';
+    await loadProjects(); renderAdminList();
+  }catch(e){ console.error(e); msg.className='a-msg err'; msg.textContent='שגיאה: '+(e.message||e); }
+}
+async function renderAdminList(){
+  const list=$('a-list'); if(!list)return;
+  const {data}=await sb.from('landing_projects').select('*').order('created_at',{ascending:false});
+  if(!data||!data.length){ list.innerHTML='<div style="color:var(--muted);font-size:13px">אין עדיין פרויקטים.</div>'; return; }
+  list.innerHTML=data.map(p=>{
+    const cover=(Array.isArray(p.images)&&p.images[0])||'';
+    return `<div class="admin-item">${cover?`<img src="${cover}">`:''}<div><b>${esc(p.name)}</b><br><span style="color:var(--muted)">${esc(p.location||'')}</span></div><button class="del" data-id="${p.id}">מחק</button></div>`;
+  }).join('');
+  list.querySelectorAll('.del').forEach(b=>b.onclick=async()=>{
+    if(!confirm('למחוק את הפרויקט?'))return;
+    await sb.from('landing_projects').delete().eq('id',b.dataset.id);
+    await loadProjects(); renderAdminList();
+  });
+}
+loadProjects();
 </script>
 </body>
 </html>
