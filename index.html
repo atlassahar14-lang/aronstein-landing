@@ -213,6 +213,10 @@
   .brand span{font-size:11.5px;color:var(--muted);font-weight:600}
   .hd-actions{display:flex;align-items:center;gap:12px}
   .hd-phone{color:var(--navy);font-weight:800;font-size:15px;display:flex;align-items:center;gap:6px}
+  .hd-phone .ic{width:16px;height:16px;color:var(--gold-dark)}
+  .hd-wa{width:38px;height:38px;border-radius:50%;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,211,102,.35);transition:transform .2s,box-shadow .2s}
+  .hd-wa:hover{transform:translateY(-2px);box-shadow:0 7px 18px rgba(37,211,102,.5)}
+  .hd-wa svg{width:20px;height:20px}
   .hd-sys{font-size:13.5px;font-weight:700;color:#fff;background:var(--navy);border-radius:11px;padding:9px 16px;transition:.2s}
   .hd-sys:hover{background:var(--navy-2);transform:translateY(-2px)}
   @media(max-width:760px){.hd-phone span,.brand span{display:none}}
@@ -317,10 +321,12 @@
   footer a{color:var(--gold);font-weight:700}
 
   .float{position:fixed;bottom:22px;left:22px;z-index:60;display:flex;flex-direction:column;gap:12px}
-  .float a{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(0,0,0,.28);font-size:27px;transition:transform .2s}
+  .float a{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(0,0,0,.28);transition:transform .2s}
   .float a:hover{transform:scale(1.08)}
-  .float .wa{background:#25d366}
-  .float .call{background:linear-gradient(135deg,#eeb63e,var(--gold));font-size:25px}
+  .float a svg{width:30px;height:30px}
+  .float .wa{background:#25d366;color:#fff}
+  .float .call{background:var(--navy);color:#fff}
+  .float .call svg{width:26px;height:26px}
 
   .demo-flag{background:#fff7e6;border-bottom:1px solid #f0c869;color:#8a5a00;text-align:center;font-size:13px;font-weight:700;padding:8px 16px}
 </style>
@@ -405,8 +411,6 @@
 </script>
 <!-- ===== /password gate ===== -->
 
-<div class="demo-flag">⚠️ טיוטה לאישור — הטקסטים בסוגריים [ ] הם ממלאי-מקום שנחליף בפרטים האמיתיים שלך.</div>
-
 <header id="hdr">
   <div class="hd">
     <div class="brand">
@@ -414,7 +418,8 @@
       <div><b>ארונשטיין</b><span>אומדני תקציב · פיקוח וניהול בנייה</span></div>
     </div>
     <div class="hd-actions">
-      <a class="hd-phone" href="tel:052-5999897">📞 <span>052-5999897</span></a>
+      <a class="hd-wa" href="https://wa.me/972525999897" target="_blank" rel="noopener" title="וואטסאפ" aria-label="וואטסאפ"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.004 0h-.008C7.174 0 .01 7.163.01 16c0 3.504 1.13 6.75 3.05 9.383L1.06 31.15l5.96-1.906A15.9 15.9 0 0 0 16.004 32C24.83 32 32 24.837 32 16S24.83 0 16.004 0zm9.31 22.594c-.386 1.09-1.92 1.995-3.144 2.26-.836.178-1.928.32-5.604-1.204-4.7-1.948-7.726-6.724-7.962-7.034-.226-.31-1.9-2.53-1.9-4.826s1.204-3.42 1.63-3.89c.35-.386.928-.562 1.482-.562.18 0 .34.01.486.016.426.018.64.043.92.714.35.84 1.198 2.94 1.298 3.152.104.212.174.46.034.77-.13.31-.24.446-.454.687-.216.24-.408.426-.626.687-.198.226-.42.47-.18.884.24.406 1.07 1.764 2.296 2.858 1.582 1.41 2.86 1.844 3.32 2.036.34.14.744.106 1.002-.16.328-.34.732-.906 1.144-1.464.29-.4.658-.45 1.044-.31.393.13 2.484 1.17 2.91 1.383.426.212.708.315.812.49.104.178.104 1.02-.282 2.11z"/></svg></a>
+      <a class="hd-phone" href="tel:052-5999897"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.18z"/></svg><span>052-5999897</span></a>
       <a class="hd-sys" href="https://atlassahar14-lang.github.io/aronstein-pikuach/" onclick="try{sessionStorage.setItem('aronstein_sys_entry','1')}catch(e){}">כניסה למערכת</a>
     </div>
   </div>
@@ -527,8 +532,8 @@
 </footer>
 
 <div class="float">
-  <a class="wa" href="https://wa.me/972525999897" title="וואטסאפ" target="_blank" rel="noopener">💬</a>
-  <a class="call" href="tel:052-5999897" title="התקשר">📞</a>
+  <a class="wa" href="https://wa.me/972525999897" title="וואטסאפ" aria-label="וואטסאפ" target="_blank" rel="noopener"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.004 0h-.008C7.174 0 .01 7.163.01 16c0 3.504 1.13 6.75 3.05 9.383L1.06 31.15l5.96-1.906A15.9 15.9 0 0 0 16.004 32C24.83 32 32 24.837 32 16S24.83 0 16.004 0zm9.31 22.594c-.386 1.09-1.92 1.995-3.144 2.26-.836.178-1.928.32-5.604-1.204-4.7-1.948-7.726-6.724-7.962-7.034-.226-.31-1.9-2.53-1.9-4.826s1.204-3.42 1.63-3.89c.35-.386.928-.562 1.482-.562.18 0 .34.01.486.016.426.018.64.043.92.714.35.84 1.198 2.94 1.298 3.152.104.212.174.46.034.77-.13.31-.24.446-.454.687-.216.24-.408.426-.626.687-.198.226-.42.47-.18.884.24.406 1.07 1.764 2.296 2.858 1.582 1.41 2.86 1.844 3.32 2.036.34.14.744.106 1.002-.16.328-.34.732-.906 1.144-1.464.29-.4.658-.45 1.044-.31.393.13 2.484 1.17 2.91 1.383.426.212.708.315.812.49.104.178.104 1.02-.282 2.11z"/></svg></a>
+  <a class="call" href="tel:052-5999897" title="התקשר" aria-label="התקשר"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.18z"/></svg></a>
 </div>
 
 <script>
