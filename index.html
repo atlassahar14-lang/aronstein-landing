@@ -585,7 +585,8 @@
   #projects .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
   @media(max-width:900px){#projects .proj-grid{grid-template-columns:1fr 1fr}}
   @media(max-width:600px){#projects .proj-grid{grid-template-columns:1fr}}
-  .proj-card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .25s,box-shadow .25s}
+  .proj-card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .25s,box-shadow .25s}
+  .proj-card .demo-badge{position:absolute;top:10px;right:10px;z-index:2;background:var(--gold);color:#3a2600;font-size:11px;font-weight:800;padding:3px 11px;border-radius:20px;box-shadow:0 3px 8px rgba(0,0,0,.2)}
   .proj-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
   .proj-card .cover{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--soft)}
   .proj-card .pc-body{padding:18px 20px}
@@ -651,27 +652,31 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 
 /* ---- public gallery ---- */
+function heroImg(){ try{ const m=getComputedStyle(document.querySelector('.hero')).backgroundImage.match(/url\(["']?(data:image\/[^"')]+)["']?\)/); return m?m[1]:''; }catch(e){ return ''; } }
+function demoProject(){ return {_demo:true, name:'וילת בטון חשוף', location:'דוגמה · כוכב יאיר', description:'בית פרטי דו-מפלסי בשטח של כ-240 מ״ר בגמר בטון חשוף. ליווי מלא מהאומדן ועד המפתח — בתקציב ובזמן.', images:[heroImg()].filter(Boolean)}; }
+function cardHtml(p,idx){
+  const imgs=Array.isArray(p.images)?p.images:[]; const cover=imgs[0]||'';
+  return `<div class="proj-card" data-i="${idx}">
+    ${p._demo?`<span class="demo-badge">דוגמה</span>`:''}
+    ${cover?`<img class="cover" src="${cover}" alt="${esc(p.name)}" loading="lazy">`:`<div class="cover"></div>`}
+    <div class="pc-body"><h3>${esc(p.name)}</h3>
+    ${p.location?`<div class="loc">📍 ${esc(p.location)}</div>`:''}
+    ${p.description?`<p>${esc(p.description)}</p>`:''}
+    ${imgs.length>1?`<div class="pc-count">📷 ${imgs.length} תמונות</div>`:''}
+    </div></div>`;
+}
 async function loadProjects(){
   const grid=$('proj-grid'), empty=$('proj-empty');
+  let data=[];
   try{
-    const {data,error}=await sb.from('landing_projects').select('*').order('sort',{ascending:true}).order('created_at',{ascending:false});
-    if(error) throw error;
-    window.__projects=data||[];
-    if(!data||!data.length){ empty.style.display='block'; grid.innerHTML=''; return; }
-    empty.style.display='none';
-    grid.innerHTML=data.map((p,idx)=>{
-      const imgs=Array.isArray(p.images)?p.images:[];
-      const cover=imgs[0]||'';
-      return `<div class="proj-card" data-i="${idx}">
-        ${cover?`<img class="cover" src="${cover}" alt="${esc(p.name)}" loading="lazy">`:`<div class="cover"></div>`}
-        <div class="pc-body"><h3>${esc(p.name)}</h3>
-        ${p.location?`<div class="loc">📍 ${esc(p.location)}</div>`:''}
-        ${p.description?`<p>${esc(p.description)}</p>`:''}
-        ${imgs.length>1?`<div class="pc-count">📷 ${imgs.length} תמונות</div>`:''}
-        </div></div>`;
-    }).join('');
-    grid.querySelectorAll('.proj-card').forEach(c=>c.addEventListener('click',()=>openLb(+c.dataset.i,0)));
-  }catch(e){ console.warn('gallery load:',e.message); empty.style.display='block'; empty.textContent='הגלריה תופיע כאן ברגע שיתווספו פרויקטים.'; }
+    const r=await sb.from('landing_projects').select('*').order('sort',{ascending:true}).order('created_at',{ascending:false});
+    if(r.error) throw r.error; data=r.data||[];
+  }catch(e){ console.warn('gallery load:',e.message); }
+  if(!data.length) data=[demoProject()];   // show a sample until real projects are added
+  window.__projects=data;
+  empty.style.display='none';
+  grid.innerHTML=data.map((p,idx)=>cardHtml(p,idx)).join('');
+  grid.querySelectorAll('.proj-card').forEach(c=>c.addEventListener('click',()=>openLb(+c.dataset.i,0)));
 }
 
 /* ---- lightbox ---- */
