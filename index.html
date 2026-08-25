@@ -269,13 +269,14 @@
   @media(max-width:640px){.trust{margin-top:-30px}.trust-in{grid-template-columns:1fr}.trust-in>div{border-inline-start:0;border-top:1px solid var(--line)}.trust-in>div:first-child{border-top:0}}
 
   /* steps */
-  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
   .step{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:34px 26px;text-align:center;transition:transform .25s,box-shadow .25s;position:relative}
   .step:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
   .step .num{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 8px 18px rgba(21,36,73,.25)}
   .step h3{font-size:20px;color:var(--navy);margin-bottom:9px;font-weight:800}
   .step p{color:var(--muted);font-size:15.5px}
-  @media(max-width:820px){.steps{grid-template-columns:1fr}}
+  @media(max-width:920px){.steps{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.steps{grid-template-columns:1fr}}
 
   /* what you get — dark band */
   .get{background:linear-gradient(135deg,var(--navy),#1c2f5c);color:#fff;border-radius:0}
@@ -472,11 +473,12 @@
 <!-- HOW -->
 <section id="how">
   <div class="wrap">
-    <div class="sec-title reveal"><div class="kick">3 שלבים פשוטים</div><h2>איך מקבלים אומדן?</h2></div>
+    <div class="sec-title reveal"><div class="kick">4 שלבים פשוטים</div><h2>איך זה עובד?</h2></div>
     <div class="steps">
       <div class="step reveal"><div class="num">1</div><h3>שולחים תוכניות</h3><p>שולח לי את התוכניות של הבית (אדריכלות / קונסטרוקציה) דרך הטופס, וואטסאפ או מייל.</p></div>
       <div class="step reveal d1"><div class="num">2</div><h3>ניתוח מקצועי</h3><p>אני עובר על התוכניות סעיף-סעיף ובונה אומדן מדויק — חומרים, עבודה, כמויות ומחירים.</p></div>
       <div class="step reveal d2"><div class="num">3</div><h3>אומדן + שיחת ייעוץ</h3><p>מקבל קובץ תקציב מפורט לפי סעיפים, ושיחה אישית שבה נעבור עליו ביחד ותקבל תשובות.</p></div>
+      <div class="step reveal d3"><div class="num">4</div><h3>פיקוח על כל הבנייה</h3><p>רוצה להמשיך יחד? אני מלווה ומפקח על כל הבנייה — מהיסודות ועד המפתח — שהכל ייבנה נכון, בתקציב ובזמן.</p></div>
     </div>
   </div>
 </section>
